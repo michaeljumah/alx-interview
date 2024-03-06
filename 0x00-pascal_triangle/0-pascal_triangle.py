@@ -16,6 +16,6 @@ def pascal_triangle(n):
             if j == 0 or j == i:
                 current_line.append(1)
             elif i > 0 and j > 0:
-                line.appendpascal_triangle[i - 1][j - 1] + pascal_triangle[i - 1][j])
+                line.append(pascal_triangle[i - 1][j - 1] + pascal_triangle[i - 1][j])
             pascal_triangle.append(current_line)
     return pascal_triangle

@@ -3,55 +3,49 @@
 
 
 def isWinner(x, nums):
-    """Function to get who has won in prime game"""
-    mariaWinsCount = 0
-    benWinsCount = 0
+    """Function to determine the winner of the prime game."""
+    maria_wins = 0
+    ben_wins = 0
 
     for num in nums:
-        roundsSet = list(range(1, num + 1))
-        primesSet = primes_in_range(1, num)
+        primes_set = primes_in_range(1, num)
 
-        if not primesSet:
-            benWinsCount += 1
+        if not primes_set:
+            ben_wins += 1
             continue
 
-        isMariaTurns = True
+        maria_turn = True
+        while True:
+            valid_move_available = False
 
-        while(True):
-            if not primesSet:
-                if isMariaTurns:
-                    benWinsCount += 1
-                else:
-                    mariaWinsCount += 1
-                break
+            # Maria's turn
+            if maria_turn:
+                for prime in primes_set:
+                    if prime in rounds_set:
+                        valid_move_available = True
+                        primes_set.remove(prime)
+                        rounds_set = [x for x in rounds_set if x % prime != 0]
+                        break
+                if not valid_move_available:
+                    ben_wins += 1
+                    break
+            # Ben's turn
+            else:
+                for prime in primes_set:
+                    if prime in rounds_set:
+                        valid_move_available = True
+                        primes_set.remove(prime)
+                        rounds_set = [x for x in rounds_set if x % prime != 0]
+                        break
+                if not valid_move_available:
+                    maria_wins += 1
+                    break
 
-            smallestPrime = primesSet.pop(0)
-            roundsSet.remove(smallestPrime)
+            maria_turn = not maria_turn
 
-            roundsSet = [x for x in roundsSet if x % smallestPrime != 0]
-
-            isMariaTurns = not isMariaTurns
-
-    if mariaWinsCount > benWinsCount:
-        return "Winner: Maria"
-
-    if mariaWinsCount < benWinsCount:
-        return "Winner: Ben"
-
-    return None
-
-
-def is_prime(n):
-    """Returns True if n is prime, else False."""
-    if n < 2:
-        return False
-    for i in range(2, int(n ** 0.5) + 1):
-        if n % i == 0:
-            return False
-    return True
-
-
-def primes_in_range(start, end):
-    """Returns a list of prime numbers between start and end (inclusive)."""
-    primes = [n for n in range(start, end+1) if is_prime(n)]
-    return primes
+    if maria_wins > ben_wins:
+        return "Maria"
+    elif ben_wins > maria_wins:
+        return "Ben"
+    else:
+        return None
